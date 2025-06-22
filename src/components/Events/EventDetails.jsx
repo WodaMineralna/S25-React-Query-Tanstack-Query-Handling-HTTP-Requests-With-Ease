@@ -37,6 +37,70 @@ export default function EventDetails() {
     mutate({ id });
   }
 
+  let content;
+
+  if (isPending) {
+    content = (
+      <div id="event-details-content" className="center">
+        <LoadingIndicator />
+      </div>
+    );
+  }
+
+  if (isError) {
+    content = (
+      <div id="event-details-content" className="center">
+        <ErrorBlock
+          title="Could not fetch event data"
+          message={
+            error.info?.message || "There was an error while loading event data"
+          }
+        />
+      </div>
+    );
+  }
+
+  if (data) {
+    content = (
+      <article id="event-details">
+        <header>
+          <h1>{data?.title}</h1>
+          <nav>
+            <button onClick={handleDeletion} disabled={isMutationPending}>
+              Delete
+            </button>
+            <Link to="edit" disabled={isMutationPending}>
+              Edit
+            </Link>
+          </nav>
+        </header>
+        <div id="event-details-content">
+          <img
+            src={`http://192.168.1.18:3000/${data?.image}`}
+            alt={data?.image}
+          />
+          <div id="event-details-info">
+            <div>
+              <p id="event-details-location">{data?.location}</p>
+              <time
+                dateTime={`${data?.date} ${data?.time}`}
+              >{`${data?.date}, ${data?.time}`}</time>
+            </div>
+            <p id="event-details-description">{data?.description}</p>
+          </div>
+        </div>
+        {isMutationError && (
+          <ErrorBlock
+            title="Failed to delete the event"
+            message={
+              mutationError.info?.message || "Could not delete the event"
+            }
+          />
+        )}
+      </article>
+    );
+  }
+
   return (
     <>
       <Outlet />
@@ -45,51 +109,7 @@ export default function EventDetails() {
           View all Events
         </Link>
       </Header>
-      {isPending ? (
-        <LoadingIndicator />
-      ) : isError ? (
-        <ErrorBlock
-          title="An error occured!"
-          message={
-            error.info?.message || "There was an error loading event data"
-          }
-        />
-      ) : (
-        <article id="event-details">
-          <header>
-            <h1>{data?.title}</h1>
-            <nav>
-              <button onClick={handleDeletion} disabled={isMutationPending}>
-                Delete
-              </button>
-              <Link to="edit" disabled={isMutationPending}>
-                Edit
-              </Link>
-            </nav>
-          </header>
-          <div id="event-details-content">
-            <img
-              src={`http://192.168.1.18:3000/${data?.image}`}
-              alt={data?.image}
-            />
-            <div id="event-details-info">
-              <div>
-                <p id="event-details-location">{data?.location}</p>
-                <time
-                  dateTime={`${data?.date} ${data?.time}`}
-                >{`${data?.date}, ${data?.time}`}</time>
-              </div>
-              <p id="event-details-description">{data?.description}</p>
-            </div>
-          </div>
-        </article>
-      )}
-      {isMutationError && (
-        <ErrorBlock
-          title="Failed to delete the event"
-          message={mutationError.info?.message || "Could not delete the event"}
-        />
-      )}
+      {content}
     </>
   );
 }
