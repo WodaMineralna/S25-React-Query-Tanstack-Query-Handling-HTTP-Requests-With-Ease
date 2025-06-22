@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
@@ -7,8 +8,11 @@ import Header from "../Header.jsx";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
 import { queryClient } from "../../util/queryClient.js";
 import LoadingIndicator from "../UI/LoadingIndicator.jsx";
+import Modal from "../UI/Modal.jsx";
 
 export default function EventDetails() {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -34,7 +38,13 @@ export default function EventDetails() {
     },
   });
 
-  console.log(data); // DEBUG
+  function handleStartDelete() {
+    setIsDeleting(true);
+  }
+
+  function handleStopDelete() {
+    setIsDeleting(false);
+  }
 
   function handleDeletion() {
     mutate({ id });
@@ -69,7 +79,7 @@ export default function EventDetails() {
         <header>
           <h1>{data?.title}</h1>
           <nav>
-            <button onClick={handleDeletion} disabled={isMutationPending}>
+            <button onClick={handleStartDelete} disabled={isMutationPending}>
               Delete
             </button>
             <Link to="edit" disabled={isMutationPending}>
@@ -106,6 +116,31 @@ export default function EventDetails() {
 
   return (
     <>
+      {isDeleting && (
+        <Modal onClose={handleStopDelete}>
+          <h2>Are you sure?</h2>
+          <p>
+            Do you really want to delete this event? This action cannot be
+            undone!
+          </p>
+          <div className="form-actions">
+            <button
+              onClick={handleStopDelete}
+              className="button-text"
+              disabled={isMutationPending}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDeletion}
+              className="button"
+              disabled={isMutationPending}
+            >
+              {isMutationPending ? "Deleting..." : "Delete"}
+            </button>
+          </div>
+        </Modal>
+      )}
       <Outlet />
       <Header>
         <Link to="/events" className="nav-item">
