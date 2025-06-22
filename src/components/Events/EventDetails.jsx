@@ -102,14 +102,6 @@ export default function EventDetails() {
             <p id="event-details-description">{data?.description}</p>
           </div>
         </div>
-        {isMutationError && (
-          <ErrorBlock
-            title="Failed to delete the event"
-            message={
-              mutationError.info?.message || "Could not delete the event"
-            }
-          />
-        )}
       </article>
     );
   }
@@ -139,6 +131,14 @@ export default function EventDetails() {
               {isMutationPending ? "Deleting..." : "Delete"}
             </button>
           </div>
+          {isMutationError && (
+            <ErrorBlock
+              title="Failed to delete the event"
+              message={
+                mutationError.info?.message || "Could not delete the event"
+              }
+            />
+          )}
         </Modal>
       )}
       <Outlet />
