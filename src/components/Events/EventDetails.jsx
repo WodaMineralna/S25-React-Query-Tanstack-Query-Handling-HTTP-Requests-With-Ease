@@ -13,7 +13,7 @@ export default function EventDetails() {
   const navigate = useNavigate();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["event", { id }],
+    queryKey: ["events", id],
     queryFn: ({ signal }) => fetchEvent({ signal, id }),
     staleTime: 15000,
   });
@@ -26,7 +26,7 @@ export default function EventDetails() {
   } = useMutation({
     mutationFn: deleteEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries("event"); // ? needed?
+      queryClient.invalidateQueries({ queryKey: ["events"] }); // ? needed?
       navigate("/events");
     },
   });
@@ -68,7 +68,10 @@ export default function EventDetails() {
             </nav>
           </header>
           <div id="event-details-content">
-            <img src={`http://192.168.1.18:3000/${data?.image}`} alt={data?.image} />
+            <img
+              src={`http://192.168.1.18:3000/${data?.image}`}
+              alt={data?.image}
+            />
             <div id="event-details-info">
               <div>
                 <p id="event-details-location">{data?.location}</p>

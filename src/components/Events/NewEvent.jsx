@@ -14,9 +14,9 @@ export default function NewEvent() {
     // mutationKey: ["test"]     -     not needed
     mutationFn: createNewEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries("event")
-      navigate("/events")
-    }
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      navigate("/events");
+    },
   });
 
   function handleSubmit(formData) {
