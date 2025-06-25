@@ -6,10 +6,12 @@ import EventItem from "./EventItem.jsx";
 
 import { fetchEvents } from "../../util/http.js";
 
+const MAX_RECENT_EVENTS = 3;
+
 export default function NewEventsSection() {
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["events"],
-    queryFn: fetchEvents,
+    queryKey: ["events", { max: MAX_RECENT_EVENTS }],
+    queryFn: ({ signal, queryKey }) => fetchEvents({ signal, ...queryKey[1] }),
     staleTime: 5000,
     gcTime: 15000,
   });
