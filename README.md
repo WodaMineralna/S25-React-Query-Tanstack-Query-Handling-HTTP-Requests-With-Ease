@@ -5,14 +5,15 @@ Practice code for Section 25 - React Query & Tanstack Query - Handling HTTP Requ
 This project covers
 - Data fetching and caching with React Query (Tanstack Query)
 - Loading, error and background refresh
-Project type
-- Based on a guided project
+  
+# Project type
+Implemented as part of a guided course project, with additional features and customizations added independently.
 
 ## Tech Stack
 - React
 - JavaScript (ES6+)
 - Build tool - Vite
-- React Query
+- React Query (Tanstack Query)
 ## How to Run
 
 ```bash
