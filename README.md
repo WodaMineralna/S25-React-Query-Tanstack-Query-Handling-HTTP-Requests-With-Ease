@@ -2,7 +2,7 @@
 
 Practice code for Section 25 - React Query & Tanstack Query - Handling HTTP Requests with Ease, part of the course "React - The Complete Guide (incl. Redux)" by Maximilian Schwarzmüller.
 
-This project covers
+This project covers:
 - Data fetching and caching with React Query (Tanstack Query)
 - Loading, error and background refresh
   
